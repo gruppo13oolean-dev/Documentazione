@@ -15,6 +15,11 @@ on:
 permissions:
   contents: write
 
+# Se fai più push di fila, annulla le run vecchie ancora in corso sullo stesso branch
+concurrency:
+  group: latex-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -24,50 +29,101 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Individua i documenti da ricompilare
+        id: detect
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          compile_all=false
+          changed=""
+
+          case "$EVENT" in
+            workflow_dispatch) compile_all=true ;;
+            pull_request)      range="$BASE_SHA...$HEAD_SHA" ;;
+            push)
+              if [[ -z "$BEFORE" || "$BEFORE" =~ ^0+$ ]]; then
+                compile_all=true          # primo push di un branch nuovo
+              else
+                range="$BEFORE..$SHA"
+              fi ;;
+          esac
+
+          if [ "$compile_all" = false ]; then
+            changed=$(git diff --name-only "$range") || compile_all=true
+            # Se cambia il workflow stesso, ricompila tutto
+            if grep -q '^\.github/workflows/' <<<"$changed"; then compile_all=true; fi
+          fi
+
+          : > roots.list
+          count=0
+          while IFS= read -r -d '' tex; do
+            # File radice = contiene \documentclass fuori da un commento
+            grep -qE '^[^%]*\\documentclass' "$tex" || continue
+            dir=$(dirname "$tex")
+            # Ricompila solo se è cambiato qualcosa nella cartella del documento
+            if [ "$compile_all" = true ] || grep -q "^${dir}/" <<<"$changed"; then
+              printf '%s\0' "$tex" >> roots.list
+              count=$((count + 1))
+              echo "Da compilare: $tex"
+            fi
+          done < <(find src -type f -name '*.tex' -print0)
+
+          echo "Documenti da compilare: $count"
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+
       - name: Installa ambiente TeX Live
+        if: steps.detect.outputs.count != '0'
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true
-          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=3 update
-          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=3 install -y --no-install-recommends \
-            texlive-latex-base \
+          # Il trigger di man-db è la parte più lenta dell'installazione: lo disattiviamo
+          sudo rm -f /var/lib/man-db/auto-update
+          sudo apt-get -o Acquire::Retries=3 update -qq
+          sudo apt-get -o Acquire::Retries=3 install -y -qq --no-install-recommends \
             texlive-latex-extra \
             texlive-fonts-recommended \
             texlive-lang-italian \
             lmodern \
             latexmk
 
-      - name: Compilazione dei soli file principali (con \documentclass)
+      - name: Compilazione in parallelo dei documenti principali
+        if: steps.detect.outputs.count != '0'
         run: |
-          set -e
-          # Cerca tutti i file .tex ma compila solo i file radice che contengono \documentclass
-          while IFS= read -r -d '' tex_file; do
-            if grep -q "\\documentclass" "$tex_file"; then
-              dir=$(dirname "$tex_file")
-              file=$(basename "$tex_file")
-              echo "=== Compilazione documento principale: $tex_file ==="
-              
-              target_dir="output/${dir#src/}"
-              mkdir -p "$target_dir"
-              
-              # Entra nella cartella del file principale così \input{...} risolve i percorsi relativi
-              (
-                cd "$dir"
-                latexmk -pdf -interaction=nonstopmode -halt-on-error "$file"
-              )
-              
-              pdf_name="${file%.tex}.pdf"
-              if [ -f "$dir/$pdf_name" ]; then
-                cp "$dir/$pdf_name" "$target_dir/"
-                echo "PDF generato in: $target_dir/$pdf_name"
-              fi
+          set -euo pipefail
+
+          compila() {
+            local tex="$1" dir file rel target log
+            dir=$(dirname "$tex")
+            file=$(basename "$tex")
+            rel="${dir#src}"; rel="${rel#/}"
+            target="output/${rel}"
+            mkdir -p "$target"
+            log=$(mktemp)
+
+            # Entra nella cartella così \input{...} risolve i percorsi relativi
+            if (cd "$dir" && latexmk -pdf -interaction=nonstopmode -halt-on-error -silent "$file") >"$log" 2>&1; then
+              cp "$dir/${file%.tex}.pdf" "$target/"
+              echo "✔ $tex -> $target/${file%.tex}.pdf"
             else
-              echo "Saltato file incluso con \\input: $tex_file"
+              echo "::group::✘ Log di $tex"
+              cat "$log"
+              echo "::endgroup::"
+              echo "::error file=$tex::Compilazione fallita"
+              return 1
             fi
-          done < <(find "src" -type f -name "*.tex" -print0)
+          }
+          export -f compila
+
+          # Un processo latexmk per ogni core disponibile
+          xargs -0 -r -n1 -P "$(nproc)" bash -c 'compila "$1"' _ < roots.list
 
       - name: Carica anteprima PDF (scaricabile dalla pagina Actions)
+        if: steps.detect.outputs.count != '0'
         uses: actions/upload-artifact@v4
         with:
           name: anteprima-pdf-${{ github.ref_name }}
@@ -75,13 +131,13 @@ jobs:
           if-no-files-found: ignore
 
       - name: Commit e Push automatico dei PDF (SOLO su main)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: steps.detect.outputs.count != '0' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           git add output/
-          
+
           if ! git diff --staged --quiet; then
             git commit -m "Automated PDF update from GitHub Actions"
             git pull --rebase origin main
