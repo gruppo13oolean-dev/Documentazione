@@ -76,24 +76,15 @@ jobs:
           echo "Documenti da compilare: $count"
           echo "count=$count" >> "$GITHUB_OUTPUT"
 
-      - name: Installa ambiente TeX Live
+      - name: Scarica immagine TeX Live (già pronta, nessuna installazione)
         if: steps.detect.outputs.count != '0'
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: |
-          # Il trigger di man-db è la parte più lenta dell'installazione: lo disattiviamo
-          sudo rm -f /var/lib/man-db/auto-update
-          sudo apt-get -o Acquire::Retries=3 update -qq
-          sudo apt-get -o Acquire::Retries=3 install -y -qq --no-install-recommends \
-            texlive-latex-extra \
-            texlive-fonts-recommended \
-            texlive-lang-italian \
-            lmodern \
-            latexmk
+        timeout-minutes: 10
+        run: docker pull texlive/texlive:latest
 
       - name: Compilazione in parallelo dei documenti principali
         if: steps.detect.outputs.count != '0'
         run: |
+          cat > "$RUNNER_TEMP/compila.sh" <<'EOF'
           set -euo pipefail
 
           compila() {
@@ -121,12 +112,30 @@ jobs:
 
           # Un processo latexmk per ogni core disponibile
           xargs -0 -r -n1 -P "$(nproc)" bash -c 'compila "$1"' _ < roots.list
+          EOF
+
+          # Compila dentro il container TeX Live, con il tuo utente così i file non diventano di root
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp \
+            -v "$PWD":/work \
+            -v "$RUNNER_TEMP/compila.sh":/compila.sh:ro \
+            -w /work \
+            texlive/texlive:latest \
+            bash /compila.sh
+
+      - name: Prepara nome anteprima
+        if: steps.detect.outputs.count != '0'
+        id: nome
+        env:
+          REF: ${{ github.head_ref || github.ref_name }}
+        run: echo "nome=anteprima-pdf-${REF//[\/\\:\"<>|*?]/-}" >> "$GITHUB_OUTPUT"
 
       - name: Carica anteprima PDF (scaricabile dalla pagina Actions)
         if: steps.detect.outputs.count != '0'
         uses: actions/upload-artifact@v4
         with:
-          name: anteprima-pdf-${{ github.ref_name }}
+          name: ${{ steps.nome.outputs.nome }}
           path: output/**/*.pdf
           if-no-files-found: ignore
 
