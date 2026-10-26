@@ -1,69 +1,154 @@
-name: Compilazione Verbali LaTeX
+name: Compilazione Documentazione LaTeX
 
 on:
   push:
     paths:
       - 'src/**'
       - '.github/workflows/compile-verbali.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/**'
   workflow_dispatch:
 
 permissions:
   contents: write
 
+# Se fai più push di fila, annulla le run vecchie ancora in corso sullo stesso branch
+concurrency:
+  group: latex-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Scarica la cronologia completa per consentire il push senza conflitti
           fetch-depth: 0
 
-      - name: Installa ambiente TeX Live
+      - name: Individua i documenti da ricompilare
+        id: detect
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-lang-italian latexmk
+          set -euo pipefail
+          compile_all=false
+          changed=""
 
-      - name: Compilazione e replica della struttura cartelle
-        run: |
-          # Trova tutti i file .tex dentro la cartella src/
-          find "src" -type f -name "*.tex" | while read -r tex_file; do
-            dir=$(dirname "$tex_file")
-            file=$(basename "$tex_file")
-            echo "Elaborazione di: $tex_file"
+          case "$EVENT" in
+            workflow_dispatch) compile_all=true ;;
+            pull_request)      range="$BASE_SHA...$HEAD_SHA" ;;
+            push)
+              if [[ -z "$BEFORE" || "$BEFORE" =~ ^0+$ ]]; then
+                compile_all=true          # primo push di un branch nuovo
+              else
+                range="$BEFORE..$SHA"
+              fi ;;
+          esac
 
-            # 1. Calcola il percorso di output speculare (sostituisce src/ con output/)
-            # Es: src/Verbali/Verbali interni/verbale_15-10-26 -> output/Verbali/Verbali interni/verbale_15-10-26
-            target_dir="output/${dir#src/}"
-            mkdir -p "$target_dir"
+          if [ "$compile_all" = false ]; then
+            changed=$(git diff --name-only "$range") || compile_all=true
+            # Se cambia il workflow stesso, ricompila tutto
+            if grep -q '^\.github/workflows/' <<<"$changed"; then compile_all=true; fi
+          fi
 
-            # 2. Compila LaTeX dentro la cartella sorgente per risolvere riferimenti e asset
-            (
-              cd "$dir"
-              latexmk -pdf -interaction=nonstopmode "$file"
-            )
-
-            # 3. Sposta il PDF compilato nella cartella speculare di output
-            pdf_name="${file%.tex}.pdf"
-            if [ -f "$dir/$pdf_name" ]; then
-              cp "$dir/$pdf_name" "$target_dir/"
-              echo "PDF posizionato in: $target_dir/$pdf_name"
+          : > roots.list
+          count=0
+          while IFS= read -r -d '' tex; do
+            # File radice = contiene \documentclass fuori da un commento
+            grep -qE '^[^%]*\\documentclass' "$tex" || continue
+            dir=$(dirname "$tex")
+            # Ricompila solo se è cambiato qualcosa nella cartella del documento
+            if [ "$compile_all" = true ] || grep -q "^${dir}/" <<<"$changed"; then
+              printf '%s\0' "$tex" >> roots.list
+              count=$((count + 1))
+              echo "Da compilare: $tex"
             fi
-          done
+          done < <(find src -type f -name '*.tex' -print0)
 
-      - name: Commit e Push automatico dei PDF nel repository
+          echo "Documenti da compilare: $count"
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+
+      - name: Scarica immagine TeX Live (già pronta, nessuna installazione)
+        if: steps.detect.outputs.count != '0'
+        timeout-minutes: 10
+        run: docker pull texlive/texlive:latest
+
+      - name: Compilazione in parallelo dei documenti principali
+        if: steps.detect.outputs.count != '0'
+        run: |
+          cat > "$RUNNER_TEMP/compila.sh" <<'EOF'
+          set -euo pipefail
+
+          compila() {
+            local tex="$1" dir file rel target log
+            dir=$(dirname "$tex")
+            file=$(basename "$tex")
+            rel="${dir#src}"; rel="${rel#/}"
+            target="output/${rel}"
+            mkdir -p "$target"
+            log=$(mktemp)
+
+            # Entra nella cartella così \input{...} risolve i percorsi relativi
+            if (cd "$dir" && latexmk -pdf -interaction=nonstopmode -halt-on-error -silent "$file") >"$log" 2>&1; then
+              cp "$dir/${file%.tex}.pdf" "$target/"
+              echo "✔ $tex -> $target/${file%.tex}.pdf"
+            else
+              echo "::group::✘ Log di $tex"
+              cat "$log"
+              echo "::endgroup::"
+              echo "::error file=$tex::Compilazione fallita"
+              return 1
+            fi
+          }
+          export -f compila
+
+          # Un processo latexmk per ogni core disponibile
+          xargs -0 -r -n1 -P "$(nproc)" bash -c 'compila "$1"' _ < roots.list
+          EOF
+
+          # Compila dentro il container TeX Live, con il tuo utente così i file non diventano di root
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp \
+            -v "$PWD":/work \
+            -v "$RUNNER_TEMP/compila.sh":/compila.sh:ro \
+            -w /work \
+            texlive/texlive:latest \
+            bash /compila.sh
+
+      - name: Prepara nome anteprima
+        if: steps.detect.outputs.count != '0'
+        id: nome
+        env:
+          REF: ${{ github.head_ref || github.ref_name }}
+        run: echo "nome=anteprima-pdf-${REF//[\/\\:\"<>|*?]/-}" >> "$GITHUB_OUTPUT"
+
+      - name: Carica anteprima PDF (scaricabile dalla pagina Actions)
+        if: steps.detect.outputs.count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.nome.outputs.nome }}
+          path: output/**/*.pdf
+          if-no-files-found: ignore
+
+      - name: Commit e Push automatico dei PDF (SOLO su main)
+        if: steps.detect.outputs.count != '0' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Aggiunge tutti i PDF aggiornati nella cartella output
           git add output/
 
-          # Esegue il commit solo se ci sono effettive modifiche ai PDF
           if ! git diff --staged --quiet; then
-            git commit -m "Automated update from GitHub Actions"
+            git commit -m "Automated PDF update from GitHub Actions"
             git pull --rebase origin main
             git push origin main
           else
