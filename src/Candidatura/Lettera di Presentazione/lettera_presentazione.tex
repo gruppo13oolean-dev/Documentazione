@@ -1,0 +1,155 @@
+\documentclass[11pt,a4paper]{article}
+
+% ------------------------------------------------------------
+% PACCHETTI
+% ------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{textcomp}
+\usepackage[a4paper,margin=2.5cm,headheight=15pt]{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+
+% ------------------------------------------------------------
+% DATI DA PERSONALIZZARE
+% ------------------------------------------------------------
+\newcommand{\nomegruppo}{13oolean}
+\newcommand{\emailgruppo}{gruppo13oolean@gmail.com}
+\newcommand{\datalettera}{GG/MM/AAAA}
+\newcommand{\codicecapitolato}{C0}
+\newcommand{\nomecapitolato}{AIRA}
+\newcommand{\nomeproponente}{Sanmarco Informatica}
+\newcommand{\professoreuno}{Prof. Tullio Vardanega}
+\newcommand{\professoredue}{Prof. Riccardo Cardin}
+\newcommand{\datafineprogetto}{GG/MM/AAAA}
+\newcommand{\budget}{0.000,00}
+\newcommand{\numeromembri}{N}
+
+% Link (sostituire con gli URL reali)
+\newcommand{\urlvalutazione}{https://example.com/valutazione-capitolati}
+\newcommand{\urlverbali}{https://example.com/verbali-esterni}
+\newcommand{\urlpreventivo}{https://example.com/preventivo}
+\newcommand{\urlrepository}{https://github.com/gruppo13oolean-dev/Documentazione}
+\newcommand{\urlsito}{https://example.com/sito}
+
+% Logo: inserire i file nella stessa cartella e decommentare le righe
+\newcommand{\logouni}{\includegraphics[height=2cm]{../../shared/logo_unipd crop.png}}
+\newcommand{\logogruppo}{\includegraphics[height=2cm]{../../shared/logo_gruppo.jpeg}}
+
+
+% ------------------------------------------------------------
+% STILE
+% ------------------------------------------------------------
+\colorlet{accent}{black}
+\colorlet{softbg}{white}
+\hypersetup{colorlinks=true,urlcolor=accent,linkcolor=accent}
+
+\newcommand{\lnk}[2]{\href{#1}{\underline{#2}}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small\textsc{\color{accent}\nomegruppo}}
+\rhead{\small Candidatura \codicecapitolato{} -- \nomecapitolato}
+\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8em}
+
+% ------------------------------------------------------------
+% DOCUMENTO
+% ------------------------------------------------------------
+\begin{document}
+	
+	% Mittente (sinistra) e loghi (destra)
+	\begin{minipage}[c]{0.6\textwidth}
+		{\Large\bfseries\color{accent}\nomegruppo}\\[0.3em]
+		\small
+		Email: \href{mailto:\emailgruppo}{\emailgruppo}\\
+		Composto da \numeromembri{} studenti
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{0.35\textwidth}
+		\raggedleft
+		\logogruppo\hspace{0.4cm}\logouni
+	\end{minipage}
+	
+	\vspace{0.4cm}
+	{\color{accent}\hrule height 1pt}
+	\vspace{0.6cm}
+	
+	% Destinatari (a destra) e data (a sinistra)
+	\begin{minipage}[t]{0.45\textwidth}
+		\datalettera
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.5\textwidth}
+		\raggedright
+		\textbf{Spett.le}\\
+		\professoreuno\\
+		\professoredue\\
+		Universit\`a degli Studi di Padova
+	\end{minipage}
+	
+	\vspace{0.8cm}
+	
+	\textbf{Oggetto:} candidatura per l'assegnazione del capitolato \codicecapitolato{} -- \nomecapitolato
+	
+	\vspace{0.2cm}
+	
+	Egregi Professori,
+	
+	il gruppo \textbf{\nomegruppo} desidera presentare la propria candidatura per lo svolgimento del capitolato \textbf{\codicecapitolato}, ``\textbf{\nomecapitolato}'', proposto dall'azienda \textbf{\nomeproponente}.
+	
+	\subsection*{\large\color{accent}Perch\'e abbiamo scelto questo capitolato}
+	
+	La nostra scelta si basa su due elementi principali:
+	\begin{itemize}[leftmargin=2em,itemsep=0.3em,topsep=0.2em]
+		\item \textbf{Competenze del gruppo:} le tecnologie e gli obiettivi del progetto si collegano bene alle conoscenze che i membri hanno gi\`a maturato;
+		\item \textbf{Struttura del progetto:} i requisiti sono chiari e il lavoro \`e organizzabile in moduli ben distinti, aspetto che facilita la pianificazione.
+	\end{itemize}
+	L'analisi completa \`e consultabile nel documento di \lnk{\urlvalutazione}{valutazione dei capitolati}. A confermare l'orientamento sono stati anche gli incontri con la proponente: momenti utili per chiarire i dubbi iniziali e capire le aspettative dell'azienda. Trovate i resoconti nella cartella dei \lnk{\urlverbali}{verbali esterni}.
+	
+	\subsection*{\large\color{accent}Tempi e costi}
+	
+	\begin{tcolorbox}[colback=softbg,colframe=accent,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt]
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabularx}{\linewidth}{@{}lX@{}}
+			\textbf{Proponente}       & \nomeproponente \\
+			\textbf{Consegna prevista} & \datafineprogetto \\
+			\textbf{Budget preventivato} & \budget\texteuro \\
+		\end{tabularx}
+	\end{tcolorbox}
+	
+	I dettagli economici sono riportati nel \lnk{\urlpreventivo}{preventivo dei costi e assunzione degli impegni}.
+	
+	\subsection*{\large\color{accent}I nostri impegni}
+	
+	Il gruppo \nomegruppo{} si impegna a:
+	\begin{enumerate}[leftmargin=2em,itemsep=0.3em,topsep=0.2em]
+		\item rispettare le scadenze e il preventivo economico presentati;
+		\item assicurare il monte ore dichiarato da ogni membro, con una rotazione equilibrata dei ruoli;
+		\item mantenere con l'azienda proponente un dialogo continuo, trasparente e propositivo.
+	\end{enumerate}
+	
+	\subsection*{\large\color{accent}Materiale di riferimento}
+	
+	La documentazione prodotta e gli aggiornamenti sull'attivit\`a del gruppo sono disponibili nel \lnk{\urlrepository}{repository pubblico} e sul \lnk{\urlsito}{sito web} del gruppo.
+	
+	\vspace{0.2cm}
+	
+	Restiamo a disposizione per qualsiasi chiarimento e vi ringraziamo per il tempo e l'attenzione dedicati.
+	
+	\vspace{0.4cm}
+	
+	Cordiali saluti,\\[0.3em]
+	\textbf{\nomegruppo}
+	
+\end{document}
