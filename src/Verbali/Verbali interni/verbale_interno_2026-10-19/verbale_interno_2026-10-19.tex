@@ -1,0 +1,174 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- CODIFICA, LINGUA E TIPOGRAFIA ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% --- GEOMETRIA E LAYOUT ---
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=15pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{xcolor}
+
+% --- COLLEGAMENTI E METADATI PDF ---
+\usepackage[
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue!70!black,
+    citecolor=black,
+    pdftitle={Verbale Interno N. 2 - 13oolean},
+    pdfauthor={13oolean}
+]{hyperref}
+
+% --- DEFINIZIONE METADATI E COMANDI RIUTILIZZABILI ---
+\newcommand{\GroupName}{13oolean}
+\newcommand{\GroupEmail}{\href{mailto:gruppo13oolean@gmail.com}{gruppo13oolean@gmail.com}}
+\newcommand{\DocTitle}{Verbale Riunione Interna \#2}
+\newcommand{\DocDate}{19-10-2026}
+
+% --- CONFIGURAZIONE INTESTAZIONI E PIÈ DI PAGINA ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textbf{\GroupName}}
+\chead{\DocTitle}
+\rhead{\DocDate}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ==============================================================================
+\begin{document}
+
+% ------------------------------------------------------------------------------
+% FRONTESPIZIO
+% ------------------------------------------------------------------------------
+\begin{titlepage}
+    \centering
+    
+    \includegraphics[width=0.45\textwidth]{../../../shared/logo_unipd.png}\par
+    \vspace{0.8cm}
+    
+    {\scshape\large Università degli Studi di Padova\par}
+    {\large Corso di Laurea Triennale in Informatica\par}
+    {\large Corso di Ingegneria del Software -- A.A. 2026/2027\par}
+    
+    \vspace{1cm}
+    \includegraphics[width=0.35\textwidth]{../../../shared/logo_gruppo.jpeg}\par
+    \vspace{0.8cm}
+
+    {\large Gruppo: \textbf{\GroupName}\par}
+    {\large Email: \GroupEmail\par}
+
+    \vfill
+
+    {\Huge\bfseries \DocTitle\par}
+    \vspace{0.3cm}
+    {\large Data: \DocDate\par}
+    
+    \vspace{1.5cm}
+\end{titlepage}
+
+% ------------------------------------------------------------------------------
+% INDICE E INIZIO CONTENUTO
+% ------------------------------------------------------------------------------
+\pagenumbering{Roman}
+\tableofcontents
+\clearpage
+
+\pagenumbering{arabic}
+
+\section{Informazioni Generali}
+\begin{itemize}
+    \item \textbf{Luogo / Piattaforma:} Server Discord
+    \item \textbf{Data:} \DocDate
+    \item \textbf{Orario:} 15:00 -- 16:30
+    \item \textbf{Responsabile:} Gabriele Maria D'Amico
+    \item \textbf{Scriba:} Michele Tosato
+    \item \textbf{Partecipanti:}
+        \begin{itemize}
+            \item Andrea Guerra
+            \item Francesco Cirigliano
+            \item Gabriele Maria D'Amico
+            \item Giacomo Lazzarotto
+            \item Michele Tosato
+        \end{itemize}
+    \item \textbf{Assenti:}
+        \begin{itemize}
+            \item Davide Menegaldo
+        \end{itemize}
+\end{itemize}
+
+\clearpage
+
+\section{Ordine del Giorno}
+\begin{enumerate}
+    \item Preparazione delle domande da sottoporre alle aziende.
+    \item Individuazione dei contenuti da includere nel primo diario di bordo.
+    \item Analisi della documentazione richiesta per la candidatura.
+    \item Discussione sulla realizzazione di un sito web per la documentazione del progetto.
+\end{enumerate}
+
+\clearpage
+
+\section{Resoconto della Riunione}
+
+\subsection{Studio dei capitolati e preparazione delle domande}
+I membri hanno condiviso le domande relative ai capitolati \textbf{C0} e \textbf{C8} preparate in precedenza, come concordato nella riunione precedente, individuando quelle relative a dubbi e aspetti di interesse comune. Le domande individuate sono state raccolte e organizzate in un unico documento, in vista dei futuri incontri con le aziende proponenti.
+
+\subsection{Diario di bordo e attività preparatorie}
+Il gruppo ha raccolto e organizzato le informazioni relative alle attività svolte durante la fase di preparazione del progetto, al fine di delineare lo stato di avanzamento da esporre nel primo diario di bordo. Sono stati inoltre individuati i principali dubbi e le incertezze emersi in questa prima fase, con particolare interesse alla suddivisione delle ore di lavoro e alla stima del preventivo.
+
+\subsection{Analisi della documentazione per la candidatura}
+Il gruppo ha esaminato la documentazione richiesta per la candidatura, valutando quali documenti potessero essere affrontati già nella fase attuale del progetto. Al termine del confronto, si è ritenuto opportuno rimandare la predisposizione dei documenti, in attesa di raccogliere maggiori informazioni utili a definirne i contenuti.
+
+\subsection{Organizzazione della documentazione del progetto}
+Il gruppo ha discusso la possibilità di realizzare un sito web dedicato alla presentazione del progetto, con l’obiettivo di raccogliere e rendere facilmente consultabili le informazioni relative al lavoro svolto, alle sue diverse fasi e ai risultati raggiunti.
+
+\clearpage
+
+\section{Decisioni Prese}
+
+\begin{table}[htbp]
+\centering
+\caption{Riepilogo delle decisioni assunte durante la riunione}
+\label{tab:decisioni}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Codice} & \textbf{Decisione} \\
+\midrule
+DEC-1.6 & Scelta delle domande di interesse comune relative ai capitolati C0 e C8. \\
+DEC-1.7 & Assegnato il compito di organizzazione della documentazione interna. \\
+DEC-1.8 & Assegnato il compito di preparazione della presentazione per il primo diario di bordo. \\
+DEC-1.9 & Assegnato il compito di stesura del verbale. \\
+DEC-1.10 & Concordata realizzazione di un sito web per la documentazione del progetto. \\
+DEC-1.11 & Fissata prossima riunione per il 23-10-2026 alle ore 15:00. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Azioni da Svolgere}
+
+\begin{table}[htbp]
+\centering
+\caption{Elenco delle azioni e task assegnati}
+\label{tab:azioni}
+\begin{tabularx}{\textwidth}{l l X l c}
+\toprule
+\textbf{Codice} & \textbf{Rif.} & \textbf{Descrizione Task} & \textbf{Assegnatario} & \textbf{Scadenza} \\
+\midrule
+T-1.5 & DEC-1.7 & Organizzazione e strutturazione della documentazione interna & Andrea & 25-10-2026 \\
+T-1.6 & DEC-1.6 & Revisione delle domande e contatto con le aziende proponenti & Francesco & 25-10-2026 \\
+T-1.7 & DEC-1.8 & Preparazione della presentazione per il primo diario di bordo & Giacomo & 25-10-2026 \\
+T-1.8 & DEC-1.10 & Creazione del sito web per la documentazione di progetto & Gabriele & 01-11-2026 \\
+T-1.9 & DEC-1.9 & Stesura del verbale relativo alla riunione tenuta il 19-10-2026 & Michele & 19-10-2026 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\end{document}
