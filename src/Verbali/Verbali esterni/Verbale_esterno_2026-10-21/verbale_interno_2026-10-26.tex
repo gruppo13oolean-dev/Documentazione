@@ -1,0 +1,165 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- CODIFICA, LINGUA E TIPOGRAFIA ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{lmodern}
+\usepackage{microtype} 
+
+% --- GEOMETRIA E LAYOUT ---
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=15pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{xcolor}
+\newcommand{\bloccofirma}[3]{%
+	\begin{minipage}[t]{0.42\textwidth}
+		\textbf{#1}\\[0.3em]   % Nome azienda
+		#2\\                   % Nome responsabile
+		\textit{#3}\\[3em]     % Ruolo (+ spazio per la firma)
+		\rule{\linewidth}{0.4pt}\\
+		{\small Firma}
+	\end{minipage}%
+}
+
+% --- COLLEGAMENTI E METADATI PDF ---
+\usepackage[
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue!70!black,
+    citecolor=black,
+    pdftitle={Verbale Interno N. 3 - 13oolean},
+    pdfauthor={13oolean}
+]{hyperref}
+
+% --- DEFINIZIONE METADATI E COMANDI RIUTILIZZABILI ---
+\newcommand{\GroupName}{13oolean}
+\newcommand{\GroupEmail}{\href{mailto:gruppo13oolean@gmail.com}{gruppo13oolean@gmail.com}}
+\newcommand{\DocTitle}{Verbale Riunione Esterna \#1}
+\newcommand{\DocDate}{21-10-2026}
+
+% --- CONFIGURAZIONE INTESTAZIONI E PIÈ DI PAGINA ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textbf{\GroupName}}
+\chead{\DocTitle}
+\rhead{\DocDate}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ==============================================================================
+\begin{document}
+
+% ------------------------------------------------------------------------------
+% FRONTESPIZIO
+% ------------------------------------------------------------------------------
+\begin{titlepage}
+    \centering
+    
+    \includegraphics[width=0.45\textwidth]{../../../shared/logo_unipd.png}\par
+    \vspace{0.8cm}
+    
+    {\scshape\large Università degli Studi di Padova\par}
+    {\large Corso di Laurea Triennale in Informatica\par}
+    {\large Corso di Ingegneria del Software -- A.A. 2026/2027\par}
+    
+    \vspace{1cm}
+    \includegraphics[width=0.35\textwidth]{../../../shared/logo_gruppo.jpeg}\par
+    \vspace{0.8cm}
+
+    {\large Gruppo: \textbf{\GroupName}\par}
+    {\large Email: \GroupEmail\par}
+
+    \vfill
+
+    {\Huge\bfseries \DocTitle\par}
+    \vspace{0.3cm}
+    {\large Data: \DocDate\par}
+    
+    \vspace{1.5cm}
+\end{titlepage}
+
+% ------------------------------------------------------------------------------
+% INDICE E INIZIO CONTENUTO
+% ------------------------------------------------------------------------------
+\pagenumbering{Roman} % Numerazione romana per le sezioni iniziali
+\tableofcontents
+\clearpage
+
+\pagenumbering{arabic} % Numerazione araba per il contenuto effettivo
+
+\section{Informazioni Generali}
+\begin{itemize}
+    \item \textbf{Luogo / Piattaforma:} Google Meet
+    \item \textbf{Data:} \DocDate
+    \item \textbf{Orario:} 16:00 -- 16:45
+    \item \textbf{Azienda coinvolta}: Sanmarco Informatica
+    \item \textbf{Responsabile:} Francesco Cirigliano
+    \item \textbf{Scriba:} Michele Tosato
+    \item \textbf{Partecipanti:}
+        \begin{itemize}
+            \item Andrea Guerra
+            \item Francesco Cirigliano
+            \item Giacomo Lazzarotto
+            \item Davide Menegaldo
+            \item Michele Tosato
+        \end{itemize}
+        \item \textbf{Assenti}
+        \begin{itemize}
+        	\item Gabriele Maria D'Amico
+        \end{itemize}
+\end{itemize}
+\clearpage
+\section{Chiarimenti tecnici richiesti}
+Il gruppo ha espresso la necessità di chiarimenti in merito ai seguenti aspetti, ponendo le seguenti domande:
+\begin{enumerate}
+	\item Quando si parla di software aziendali B2B, ERP, CRM e Ticketing, a quali sistemi ci si riferisce nello specifico? Inoltre, in fase di sviluppo verrà fornito un ambiente di sandbox su cui testare le nostre funzionalità, oppure la creazione di tale ambiente è a nostra discrezione? Analogamente anche per i canali di monitoraggio verranno forniti dei dataset di prova, oppure la creazione è a nostra discrezione?
+	\item Nella fase di estrazione OCR vengono proposti strumenti come Tesseract, Google Speech, ecc. Al fine di semplificare l’architettura, ma anche per migliorare la resa finale, possiamo avvalerci di tecnologie basate su LLM (es. LangChain)? Nel caso in cui non sia ammesso, come si preferisce gestire la situazione in presenza di dati OCR non validabili?
+	\item Quando si parla di generazione di un template strutturato, questo ci verrà fornito dall’azienda oppure è a nostra discrezione?
+	\item Cosa si intende con "filtro in ingresso delle richieste per prevenire l'accesso"?
+	\item In fase di mappatura e verifica avremo accesso al database al fine di controllare i dati? Se sì, come comportarsi nel momento in cui si riceve una richiesta da clienti non presenti nel database?
+	\item Potreste fornire un esempio di casistica che richiede l'intervento umano, visto che nelle slide si parla di automazione? In casi in cui una richiesta risulta incompleta (es. il cliente ordina un articolo ma dimentica di specificare la quantità), il flusso standard prevede che l'ordine venga bloccato per una revisione umana o che parta automaticamente una notifica di errore?
+	\item Quali sono le vostre aspettative e come vorreste venissero gestite le casistiche in cui il cliente invia molteplici richieste all'interno di una singola mail?
+	\item C'è preferenza nell'utilizzo di modelli locali o cloud? Nel caso di modelli cloud, come gestire eventuali costi per la fase di testing? 
+	\item Quali sono i criteri di valutazione della scalabilità? Vengono fornite metriche specifiche da soddisfare?
+	\item Nello schema architetturale a pagina 5 e 14 compare la voce 'Meeting' tra i canali in ingresso: cosa intendete a livello di dominio? Si intende la registrazione audio o la trascrizione di una videochiamata con un cliente da cui estrarre task o appuntamenti, oppure altro?
+	\item Riguardo all’interfaccia amministrativa è possibile utilizzare tecnologie differenti da quelle proposte, come ad esempio Next.js?
+	\item A livello di database interno, dobbiamo salvare anche i file grezzi allegati (PDF, immagini, file audio) oppure solo il testo estratto, il payload JSON generato e lo stato di avanzamento della pratica?
+	\item Che genere di informazioni potremmo ricevere da meeting?
+\end{enumerate}
+
+\section{Resoconto della Riunione}
+A seguito del meeting con l'azienda sono emersi i seguenti punti:
+\begin{enumerate}
+	\item Per i software aziendali (tra cui i sistemi CRM) verranno forniti dei mock e delle API dedicate; l'interesse principale risiede infatti nella gestione del flusso e nell'elaborazione dei dati verso altri software. Analogamente, per i canali di monitoraggio verrà fornito un dataset di prova composto da file PDF ed esempi testuali, come ad esempio degli ordini.
+	\item L'utilizzo di un LLM è comunque necessario e il processo può essere strutturato in più fasi: si effettua inizialmente il riconoscimento tramite OCR e, in un secondo momento, i dati vengono passati a un LLM per "migliorare" la scansione o qualora l'estrazione iniziale risulti incompleta.
+	\item La definizione del template JSON è a nostra discrezione, ma dovrà essere strutturata in funzione delle API fornite per i software aziendali (fungendo da estensione delle stesse), con la possibilità di introdurre nuove informazioni qualora si rendesse necessario.
+	\item Il filtro in ingresso consisterà in un layer necessario, preposto a svolgere le seguenti funzioni:
+	\begin{itemize}
+		\item Controllo degli accessi e autenticazione: bloccare le richieste provenienti da tenant non autenticati o non autorizzati e verificare chi è autenticato (tramite indirizzi email o numeri di telefono) effettuando un riscontro con l'anagrafica, sulla base dei dati che verranno forniti dall'azienda.
+		\item Filtro anti-spam: applicare un controllo anti-spam sulle email in ingresso.
+		\item Anonimizzazione dei dati: procedere all'anonimizzazione delle informazioni private presenti nelle richieste.
+	\end{itemize}
+	\item L'accesso ai dati per la verifica sarà parziale: verrà infatti fornita una lista contenente l'anagrafica al fine di validare i dati e capire chi sta effettuando il contatto, mentre il tool non dovrà verificare se un determinato articolo esista o meno, in quanto tale controllo sarà compito del software aziendale.
+	\item La gestione di queste situazioni è lasciata a nostra discrezione e comprende casi d'uso borderline che richiedono un'analisi specifica, da inserire già nell'analisi di base. Essendo il focus principale del progetto l'estrazione del dato, il sistema può gestire le anomalie secondo diverse modalità in base alla natura del problema: nel caso di una mancanza di informazioni imputabile a un errore umano del mittente, è possibile contattare direttamente l'utente tramite email; qualora invece il problema derivi da una bassa affidabilità o da un probabile errore dell'OCR, ad esempio se vengono individuati solo 9 articoli su 10 oppure non si riesce a estrarre il nome di un articolo, si richiede la revisione umana, segnalando nello specifico l'elemento che è risultato impossibile da estrarre.
+	\item In presenza di mail contenenti molteplici richieste di acquisto inviate tramite canali differenti, viene data priorità al testo della mail considerato come contenuto principale. L'eventuale allegato viene scartato, segnalando tuttavia l'accaduto sui log in caso di discrepanza dei dati riscontrata tra il testo e il documento allegato.
+	\item C'è una netta preferenza per l'utilizzo di modelli locali (viene indicato ad esempio QWEN), non essendovi una reale necessità di ricorrere a soluzioni cloud. È fondamentale garantire un'elevata flessibilità che permetta di sostituire agilmente il modello con un altro in un secondo momento, ponendo particolare attenzione all'utilizzo di modelli che mettono a disposizione API compatibili con lo standard OpenAI.
+	\item La scalabilità viene valutata sulla capacità del sistema di gestire un centinaio di richieste concorrenti in modo asincrono, potendo impiegare minuti, mezz'ora o persino ore per l'elaborazione, in quanto viene posta una priorità assoluta sull'affidabilità del processo piuttosto che sulla velocità di esecuzione.
+	\item La voce 'Meeting' rappresenta una feature opzionale che prevede di gestire sia la registrazione vocale che la trascrizione. Da questi flussi si punta a estrarre non solo ordini, ma anche informazioni di altra natura, ticketing e richieste di assistenza. Richiedendo quindi una contestualizzazione complessiva e l'estrazione mirata del contesto. Tuttavia, questa non è considerata una priorità, in quanto l'attenzione principale resta concentrata sulle email con allegati (PDF e immagini) e sui messaggi vocali di WhatsApp (nell'ordine dei secondi).
+	\item L'utilizzo di Next.js non è fattibile per lo sviluppo dell'interfaccia amministrativa. È invece necessario adottare lo stack tecnologico proposto, basato su Java e Angular, in quanto ritenuto indispensabile per garantire una futura integrazione con i sistemi esistenti.
+	\item Il salvataggio dei file grezzi (come PDF, immagini e file audio) è un aspetto da approfondire, tenendo conto che, qualora vengano salvati, i file andrebbero opportunamente cifrati. Tali allegati possono rivelarsi utili sia per un eventuale invio verso l'esterno (verso il software B2B utilizzato), sia come informazioni a corredo impiegate principalmente a fini di debugging.
+\end{enumerate}
+\section{Approvazione e Firme}
+I rappresentanti approvano formalmente il contenuto del presente verbale.
+\vspace{2em}
+\newline
+\vspace{2em}
+\noindent
+\bloccofirma{Gruppo 13oolean}{Francesco Cirigliano}{Responsabile}%
+\hfill
+\bloccofirma{Sanmarco Informatica}{Linda Benozzato}{Referente Aziendale}
+\end{document}
