@@ -76,7 +76,7 @@ L'organizzazione/repository GitHub è utilizzata per la gestione e lo sviluppo d
 
 Email ufficiale del gruppo: 
 
-**gruppo13oolean@gmail.com(mailto:gruppo13oolean@gmail.com)**
+**gruppo13oolean@gmail.com**
 
 ---
 
