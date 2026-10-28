@@ -14,9 +14,7 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{tcolorbox}
-\usepackage[hidelinks]{hyperref}
-
-% ------------------------------------------------------------
+\usepackage[colorlinks=true, urlcolor=blue, linkcolor=blue]{hyperref}% ------------------------------------------------------------
 % DATI DA PERSONALIZZARE
 % ------------------------------------------------------------
 \newcommand{\nomegruppo}{13oolean }
@@ -48,8 +46,12 @@
 % ------------------------------------------------------------
 \colorlet{accent}{black}
 \colorlet{softbg}{white}
-\hypersetup{colorlinks=true,urlcolor=accent,linkcolor=accent}
-
+\hypersetup{
+colorlinks=true,
+urlcolor=blue,
+linkcolor=blue,
+pdfborder={0 0 0}
+}
 \newcommand{\lnk}[2]{\href{#1}{\underline{#2}}}
 
 \pagestyle{fancy}
@@ -100,18 +102,15 @@
 	
 	\vspace{0.8cm}
 	
-	\textbf{Oggetto:}  \codicecapitolato{} -- \nomecapitolato
+	\textbf{Oggetto:}  Scelta del capitolato C0: AIRA
 	
 	\vspace{0.2cm}
 	
-	\subsection*{\large\color{accent}Perch\'e abbiamo scelto questo capitolato}
 
-\noindent
-All'attenzione del gentile Prof. Tullio Vardanega e Prof. Riccardo Cardin,
 
 \medskip
 
-con la presente, il gruppo 13oolean comunica formalmente la propria
+Con la presente, il gruppo 13oolean comunica formalmente la propria
 intenzione di candidarsi per il capitolato
 \textbf{C0, Progetto AIRA: AI Requests Automation},
 proposto dall'azienda \textbf{Sanmarco Informatica}.
@@ -152,7 +151,7 @@ Per agevolare la consultazione della documentazione, è inoltre
 disponibile il sito web del gruppo, raggiungibile al seguente link:
 
 \begin{center}
-    \url{[LINK SITO WEB]}
+    \url{https://13oolean-documentazione.vercel.app/}
 \end{center}
 
 \medskip
