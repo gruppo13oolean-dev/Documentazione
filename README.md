@@ -82,4 +82,4 @@ Email ufficiale del gruppo:
 
 ## Nota
 
-La presente organizzazione è utilizzata esclusivamente per finalità didattiche nell'ambito del corso di Ingegneria del Software dell'[Nome Università].
+La presente organizzazione è utilizzata esclusivamente per finalità didattiche nell'ambito del corso di Ingegneria del Software dell‘Università di Padova.
