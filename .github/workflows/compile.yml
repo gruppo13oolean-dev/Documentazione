@@ -15,7 +15,7 @@ on:
 permissions:
   contents: write
 
-# Se fai più push di fila, annulla le run vecchie ancora in corso sullo stesso branch
+# Annulla le esecuzioni ancora in corso sullo stesso ref quando ne viene avviata una nuova.
 concurrency:
   group: latex-${{ github.ref }}
   cancel-in-progress: true
@@ -24,12 +24,12 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout del repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Individua i documenti da ricompilare
+      - name: Individuazione dei documenti da compilare
         id: detect
         env:
           EVENT: ${{ github.event_name }}
@@ -42,12 +42,14 @@ jobs:
           compile_all=false
           changed=""
 
+          # Determina l'intervallo di commit da confrontare in base all'evento.
           case "$EVENT" in
             workflow_dispatch) compile_all=true ;;
             pull_request)      range="$BASE_SHA...$HEAD_SHA" ;;
             push)
               if [[ -z "$BEFORE" || "$BEFORE" =~ ^0+$ ]]; then
-                compile_all=true          # primo push di un branch nuovo
+                # Primo push di un nuovo branch: non esiste un commit di riferimento.
+                compile_all=true
               else
                 range="$BEFORE..$SHA"
               fi ;;
@@ -55,17 +57,17 @@ jobs:
 
           if [ "$compile_all" = false ]; then
             changed=$(git diff --name-only "$range") || compile_all=true
-            # Se cambia il workflow stesso, ricompila tutto
+            # Una modifica al workflow richiede la ricompilazione completa.
             if grep -q '^\.github/workflows/' <<<"$changed"; then compile_all=true; fi
           fi
 
           : > roots.list
           count=0
           while IFS= read -r -d '' tex; do
-            # File radice = contiene \documentclass fuori da un commento
+            # Sono considerati documenti principali i file con \documentclass non commentato.
             grep -qE '^[^%]*\\documentclass' "$tex" || continue
             dir=$(dirname "$tex")
-            # Ricompila solo se è cambiato qualcosa nella cartella del documento
+            # Il documento viene compilato solo se la sua cartella contiene file modificati.
             if [ "$compile_all" = true ] || grep -q "^${dir}/" <<<"$changed"; then
               printf '%s\0' "$tex" >> roots.list
               count=$((count + 1))
@@ -76,70 +78,98 @@ jobs:
           echo "Documenti da compilare: $count"
           echo "count=$count" >> "$GITHUB_OUTPUT"
 
-      - name: Scarica immagine TeX Live (già pronta, nessuna installazione)
+      - name: Download dell'immagine TeX Live
         if: steps.detect.outputs.count != '0'
         timeout-minutes: 10
         run: docker pull texlive/texlive:latest
 
-      - name: Compilazione in parallelo dei documenti principali
+      - name: Compilazione dei documenti principali
         if: steps.detect.outputs.count != '0'
         run: |
           cat > "$RUNNER_TEMP/compila.sh" <<'EOF'
           set -euo pipefail
 
+          # Compila un singolo documento e ne copia il PDF in output/ e nella cartella di anteprima.
           compila() {
-            local tex="$1" dir file rel target log
+            local tex="$1" dir file name rel target log texlog
             dir=$(dirname "$tex")
             file=$(basename "$tex")
+            name="${file%.tex}"
             rel="${dir#src}"; rel="${rel#/}"
             target="output/${rel}"
             mkdir -p "$target"
             log=$(mktemp)
 
-            # Entra nella cartella così \input{...} risolve i percorsi relativi
+            # La compilazione avviene nella cartella del documento, così che i percorsi
+            # relativi usati da \input e \includegraphics vengano risolti correttamente.
             if (cd "$dir" && latexmk -pdf -interaction=nonstopmode -halt-on-error -silent "$file") >"$log" 2>&1; then
-              cp "$dir/${file%.tex}.pdf" "$target/"
-              echo "✔ $tex -> $target/${file%.tex}.pdf"
+              cp "$dir/${name}.pdf" "$target/"
+              # Copia destinata all'artifact: contiene solo i PDF compilati in questa esecuzione.
+              mkdir -p "/anteprima/${rel}"
+              cp "$dir/${name}.pdf" "/anteprima/${rel}/"
+              echo "[OK] $tex -> $target/${name}.pdf"
             else
-              echo "::group::✘ Log di $tex"
+              texlog="$dir/${name}.log"
+              echo "::group::[ERRORE] $tex"
+              echo "----- Output di latexmk -----"
               cat "$log"
+              if [ -f "$texlog" ]; then
+                # Con -silent l'errore effettivo è riportato solo nel file .log di LaTeX:
+                # si estraggono le righe di errore (prefisso "!") con il relativo contesto.
+                echo "----- Errori riportati in ${name}.log -----"
+                grep -n -A8 -E '^!|LaTeX Error|not found|Emergency stop' "$texlog" | head -n 80 || true
+                echo "----- Ultime righe di ${name}.log -----"
+                tail -n 25 "$texlog"
+              else
+                echo "File ${name}.log non generato."
+              fi
               echo "::endgroup::"
-              echo "::error file=$tex::Compilazione fallita"
+              # Primo messaggio di errore, mostrato come annotazione nel riepilogo dell'esecuzione.
+              local first_error=""
+              [ -f "$texlog" ] && first_error=$(grep -m1 -E '^!' "$texlog" | sed 's/^! *//' || true)
+              echo "::error file=$tex::Compilazione fallita${first_error:+: $first_error}"
               return 1
             fi
           }
           export -f compila
 
-          # Un processo latexmk per ogni core disponibile
+          # Esegue un processo di compilazione per ogni core disponibile.
           xargs -0 -r -n1 -P "$(nproc)" bash -c 'compila "$1"' _ < roots.list
           EOF
 
-          # Compila dentro il container TeX Live, con il tuo utente così i file non diventano di root
+          # Cartella temporanea, esterna al repository, destinata all'artifact di anteprima.
+          # Viene creata prima dell'avvio del container affinché appartenga all'utente del runner.
+          mkdir -p "$RUNNER_TEMP/anteprima"
+
+          # Esecuzione nel container TeX Live con l'utente del runner, così che i file
+          # generati non risultino di proprietà di root.
           docker run --rm \
             --user "$(id -u):$(id -g)" \
             -e HOME=/tmp \
             -v "$PWD":/work \
             -v "$RUNNER_TEMP/compila.sh":/compila.sh:ro \
+            -v "$RUNNER_TEMP/anteprima":/anteprima \
             -w /work \
             texlive/texlive:latest \
             bash /compila.sh
 
-      - name: Prepara nome anteprima
+      - name: Preparazione del nome dell'artifact
         if: steps.detect.outputs.count != '0'
         id: nome
         env:
           REF: ${{ github.head_ref || github.ref_name }}
+        # I caratteri non ammessi nei nomi degli artifact (ad es. "/" in "12/merge") vengono sostituiti con "-".
         run: echo "nome=anteprima-pdf-${REF//[\/\\:\"<>|*?]/-}" >> "$GITHUB_OUTPUT"
 
-      - name: Carica anteprima PDF (scaricabile dalla pagina Actions)
+      - name: Caricamento dell'anteprima PDF
         if: steps.detect.outputs.count != '0'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.nome.outputs.nome }}
-          path: output/**/*.pdf
+          path: ${{ runner.temp }}/anteprima
           if-no-files-found: ignore
 
-      - name: Commit e Push automatico dei PDF (SOLO su main)
+      - name: Commit e push dei PDF (solo su main)
         if: steps.detect.outputs.count != '0' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"

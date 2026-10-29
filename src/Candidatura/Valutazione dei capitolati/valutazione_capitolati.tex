@@ -1,0 +1,56 @@
+\documentclass[a4paper,11pt]{article}
+
+% ------------------------------------------------------------
+% PACCHETTI
+% ------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=14pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[table]{xcolor} % carica anche colortbl
+\usepackage[hidelinks]{hyperref} % indice cliccabile (lasciarlo per ultimo)
+
+% Cartella delle immagini condivise (percorso relativo a main.tex)
+\graphicspath{{../../shared/}}
+
+% ------------------------------------------------------------
+% DATI DA PERSONALIZZARE
+% ------------------------------------------------------------
+\newcommand{\nomegruppo}{13oolean}
+\newcommand{\emailgruppo}{gruppo13oolean@gmail.com}
+\newcommand{\titolodoc}{Valutazione dei capitolati}
+\newcommand{\data}{29-10-2026}
+
+% ------------------------------------------------------------
+% INTESTAZIONE E PIÈ DI PAGINA
+% ------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{\nomegruppo}}
+\fancyhead[C]{\titolodoc}
+\fancyhead[R]{\data}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\begin{document}
+	
+	\input{chapter/intestazione}
+	
+	\input{chapter/tabella_modifiche}
+	\clearpage
+	
+	\tableofcontents
+	\clearpage
+	
+	\input{chapter/valutazione_capitolati_selezionati}
+	
+	\input{chapter/valutazione_tutti_capitolati}
+	
+\end{document}
