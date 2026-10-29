@@ -1,12 +1,43 @@
-
 # File intermedi LaTeX
 *.aux
 *.log
 *.out
 *.toc
+*.lof
+*.lot
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+*.synctex(busy)
+*.xdv
+
+# Bibliografia
 *.bbl
 *.blg
+*.bcf
+*.run.xml
+
+# Indici e glossari
+*.idx
+*.ilg
+*.ind
+*.glo
+*.gls
+*.glg
+*.ist
+
+# Beamer
+*.nav
+*.snm
+*.vrb
+
+# minted
+_minted-*/
+
+# Output (togliete queste righe se volete il PDF nel repo)
+*.pdf
+!figures/**/*.pdf
+build/
+
+# Sistema
 .DS_Store
