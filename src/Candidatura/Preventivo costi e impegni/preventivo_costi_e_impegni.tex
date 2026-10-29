@@ -17,6 +17,16 @@
 \usepackage[hidelinks]{hyperref} % indice cliccabile (lasciarlo per ultimo)
 \usepackage{lmodern}
 \usepackage{amsmath}
+\newcommand{\bloccofirma}[3]{%
+	\begin{minipage}[t]{0.42\textwidth}
+		\centering
+		\vspace*{3em}          % Spazio per la firma
+		\rule{\linewidth}{0.4pt}\\[0.3em]
+		\textbf{#1}\\[0.2em]   % Nome azienda
+		#2\\                   % Nome responsabile
+		\textit{#3}            % Ruolo
+	\end{minipage}%
+}
 
 % Cartella delle immagini condivise (percorso relativo a main.tex)
 \graphicspath{{../../shared/}}
@@ -27,7 +37,7 @@
 \newcommand{\nomegruppo}{13oolean}
 \newcommand{\emailgruppo}{gruppo13oolean@gmail.com}
 \newcommand{\titolodoc}{Preventivo dei costi e impegni}
-\newcommand{\data}{28/10/2026}
+\newcommand{\data}{29-10-2026}
 
 % ------------------------------------------------------------
 % INTESTAZIONE E PIÈ DI PAGINA
