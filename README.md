@@ -2,7 +2,7 @@
 
 <!-- Logo del gruppo: metti l'immagine in una cartella del repo (es. /assets/logo.png)
      oppure usa un URL assoluto. Regola width a piacere. -->
-<img src="src/shared/logo.png" width=80%>
+<img src="src/shared/logo_bianco.png" width=80%>
 
 **Gruppo 13 – Corso di Ingegneria del Software**
 Università degli studi di Padova · A.A. 2026/2027
@@ -82,4 +82,4 @@ Email ufficiale del gruppo:
 
 ## Nota
 
-La presente organizzazione è utilizzata esclusivamente per finalità didattiche nell'ambito del corso di Ingegneria del Software dell'[Nome Università].
+La presente organizzazione è utilizzata esclusivamente per finalità didattiche nell'ambito del corso di Ingegneria del Software dell‘Università di Padova.
