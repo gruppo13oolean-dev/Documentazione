@@ -1,51 +1,87 @@
 \section{Introduzione}
+In questo documento viene presentata l'analisi dei capitolati d'appalto che abbiamo svolto al fine di valutare la fattibilità e scegliere il più adatto per il gruppo di lavoro \textbf{13oolean}. Verrano esposte in maniera chiara le motivazioni alla base della scelta di candidarci per il capitolato \textbf{AIRA}, e altrettanto verranno analizzate le altre due proposte che avevamo fortemente considerato, \textbf{NEXUM Concierge} e \textbf{Sonar}. Verranno inoltre elencati i pro e i contro di ciascuno dei capitolati rimanenti per argomentare la decisione di averli scartati.
 
 \section{Valutazione del capitolato selezionato}
-\subsection{TITOLO CAPITOLATO}
+\subsection{C0: AIRA}
 
 \subsubsection{Descrizione}
-Descrizione
+Il capitolato richiede la progettazione di un sistema multimodale basato su intelligenza artificiale per l'elaborazione di flussi informativi eterogenei e non strutturati (e-mail, file allegati, tracciati vocali e immagini). Il sistema estrae e formalizza i dati in strutture standard (JSON o record di database), avviando automatismi di notifica ed esecuzione tramite API REST verso software gestionali aziendali (ERP, CRM, piattaforme B2B e sistemi di ticketing) o flussi e-mail.
+
 \subsubsection{Dominio}
-Descrizione del domino
+\paragraph{Dominio tecnologico:}
+Durante l'incontro conoscitivo con il proponente è emerso che l'adozione di Java e Angular costituisce un requisito primario per permettere il futuro inserimento dell'applicazione nell'infrastruttura aziendale. Lo stack delineato prevede:
+\begin{itemize}
+    \item Motore di elaborazione in Java con framework Spring Boot, architettura a eventi e scheduler multicanale;
+    \item Interfaccia di gestione sviluppata in Angular e TypeScript;
+    \item Orchestrazione semantica e analisi del testo affidate a LangChain4j e modelli LLM;
+    \item Componenti di trascrizione audio (Whisper, Google Speech) e riconoscimento OCR (Tesseract, EasyOCR);
+    \item Persistenza basata su RDBMS (PostgreSQL, MariaDB o SQLite) e configurazioni di sistema via JSON/YAML.
+\end{itemize}
+Tra i requisiti chiave figurano inoltre la modularità e la scalabilità dell'architettura, oltre ad un pannello per la configurazione dei canali e alla consultazione dei log.
+\paragraph{Dominio applicativo:}
+\paragraph{Dominio applicativo:}
+Il progetto opera nel contesto B2B, caratterizzato da comunicazioni ed flussi informativi eterogenei, frammentati e spesso privi di formalizzazione standard (codici parziali, abbreviazioni o sintassi non convenzionali). Lo strumento mira a centralizzare l'acquisizione dei dati, automatizzando il parsing delle comunicazioni in ingresso (come e-mail o allegati) per estrarre informazioni strutturate e attivare le relative operazioni gestionali nei sistemi aziendali.
 
 \subsubsection{Motivazione della scelta}
-Motivazione
+La decisione del gruppo si fonda sui seguenti fattori:
+\begin{itemize}
+    \item \textbf{Interesse tecnico:} L'applicazione pratica dell'IA a un contesto industriale e l'integrazione di componenti eterogenee (LLM, OCR e trascrizione audio) rappresentano un forte stimolo per il gruppo.
+    \item \textbf{Fattibilità operativa:} I requisiti primari appaiono ben delimitati nei tempi della didattica. La presenza di moduli opzionali (dashboard di reportistica e risposte automatiche) offre un margine per calibrare lo sviluppo in base al lavoro effettivo.
+    \item \textbf{Supporto del proponente:} Sanmarco Informatica ha mostrato immediata disponibilità nel chiarire i dubbi emersi durante l'analisi preliminare, confermando il supporto di figure tecniche sia nell'avvio degli ambienti di sviluppo che nel superamento di eventuali blocchi metodologici.
+    \item \textbf{Accessibilità dello stack:} Sebbene alcune componenti richiedano uno studio iniziale, il gruppo si affida a uno stack consolidato, ampiamente documentato e supportato da una vasta community. Questo riduce notevolmente il rischio tecnico legato all'apprendimento rispetto ad architetture più di nicchia.
+\end{itemize}
+
 \subsubsection{Conclusioni}
-Conclusioni
+Visti i motivi sopra citati, il gruppo ha deciso di scegliere AIRA come progetto per cui candidarsi, ritenendolo il miglior equilibrio tra interesse, fattibilità e qualità del supporto offerto dal proponente.
 
 \section{Valutazioni dei capitolati selezionati}
 
-\subsection{CAPITOLATO 1}
+\subsection{C8: Sonar}
 
 \subsubsection{Descrizione}
-Descrizione
+L'obiettivo del capitolato è lo sviluppo di un'applicazione web destinata al monitoraggio di store Shopify. L'applicativo ha il compito di mappare le componenti del negozio (app installate, campi personalizzati, webhook e codice dei temi), mettendone in luce dipendenze e ridondanze. La piattaforma deve generare documentazione navigabile ed esportabile in formato HTML o Markdown, producendo un report sulla presenza di codice morto o elementi orfani.
+
 \subsubsection{Dominio}
-Descrizione del domino
+\paragraph{Dominio tecnologico:}
+Il capitolato prevede vincoli tecnologici ben definiti:
+\begin{itemize}
+    \item Next.js (App Router) distribuito su Vercel, sfruttando Workflows e Cron Jobs per la gestione delle analisi in background;
+    \item Supabase (PostgreSQL con politiche RLS) integrato esclusivamente con OAuth Google;
+    \item TypeScript (modalità strict) e interfacce Admin GraphQL di Shopify.
+\end{itemize}
+Viene inoltre suggerita l'adozione di Tailwind CSS con shadcn/ui, React Flow o Cytoscape.js per l'albero delle dipendenze, insieme a suite di test quali Vitest e Playwright.
+\paragraph{Dominio applicativo:} L'ambito è quello dell'e-commerce ad alti volumi, dove l'accumulo nel tempo di estensioni e personalizzazioni rende complessa la tracciabilità delle modifiche. Lo strumento mira a supportare la manutenzione continua e le fasi di replatforming o passaggio di consegne.
 
 \subsubsection{Motivazione della scelta}
-Motivazione
+Il capitolato ha suscitato forte interesse nel gruppo. Gli obbiettivi chiari e lo stack tecnologico moderno (ottima opportuanità di acquisitzione competenze su strumenti molto richiesti), sono stati motivi che hanno portato alla sua selezione. Ha inciso positivamente inoltre la disponibilità dell'azienda in un affiancamento costante al fine di garantire il successo del percorso.
+
+\subsection{Criticità riscontrate}
+\begin{itemize}
+    \item \textbf{Carico di lavoro elevato:} Il capitolato richiede un impegno significativo a causa dei venti requisiti obbligatori da soddisfare, del vincolo di copertura del codice con test per almeno il 70\% e della stesura di documentazione specifica. A questo si aggiunge la necessità di configurare manualmente uno store Shopify di test.
+    \item \textbf{Elevata curva di apprendimento sulle tecnologie:} Nonostante lo stack tecnologico sia stato valutato positivamente, la necessità di apprende un numero elevato di nuove tecnologie, contemporaneamente ad altri strumenti del dominio (ecosistema Shopify), costituirebbe un ostacolo troppo impegnativo per il gruppo.
+    \item \textbf{Vincoli dei piani gratuiti:} L'impiego delle versioni free di Vercel e Supabase impone di monitorare costantemente le quote d'uso dei servizi cloud per evitare blocchi al workflow.
+\end{itemize}
+
 \subsubsection{Conclusioni}
-Conclusioni
-\subsection{CAPITOLATO 2}
+In sintesi, le motivazioni riportate hanno reso C8 un candidato di punta per la scelta finale. Tuttavia, il peso complessivo dei numerosi requisiti obbligatori e l'elevato sforzo iniziale richiesto per lo studio delle tecnologie hanno portato il gruppo a ritenere l'opzione meno sostenibile rispetto al tempo a disposizione, preferendo orientarsi verso una proposta con un miglior equilibrio tra sfida tecnica e fattibilità temporale.
+
+\subsection{C2: NEXUM Concierge}
 
 \subsubsection{Descrizione}
-Descrizione
+Il progetto propone la realizzazione di un assistente conversazionale da integrare nella PWA della piattaforma NEXUM, orientato ai servizi HR e alla comunicazione interna. Il sistema deve rispondere in linguaggio naturale a quesiti su procedure e regolamenti aziendali, limitando il campo del prototipo iniziale (MVP) al modulo per la gestione di ferie e permessi.
+
 \subsubsection{Dominio}
-Descrizione del domino
+\paragraph{Dominio tecnologico:} Il capitolato non impone vincoli rigidi sullo stack tecnologico per il Concierge. L'architettura deve integrarsi con l'infrastruttura esistente di NEXUM, mentre la scelta degli strumenti di AI, dei modelli linguistici, dell'infrastruttura RAG e dei database viene rinviata ad una fase di analisi preliminare da concordare con l'azienda.
+\paragraph{Dominio applicativo:} L'ambito è quello della gestione delle risorse umane (HR) e della comunicazione internza aziendale. Il sistema si inserisce in un contesto reale in cui i dipendenti interagiscono con la piattaforma per consultare regolamenti aziendali, verificare il proprio saldo ferie/permessi e inoltrare le relative richieste in modo guidato.
 
 \subsubsection{Motivazione della scelta}
-Motivazione
+Il capitolato C2 ha suscitato un forte interesse nel gruppo grazie alla spiccata attualità delle tematiche proposte. La possibilità di lavorare con l'Intelligenza Artificiale generativa, applicando modelli LLM e architetture RAG a un contesto aziendale reale come quello della gestione delle risorse umane, ha rappresentato un elemento di notevole stimolo formativo per la crescita tecnica del gruppo.
+
+\subsection{Criticià riscontrate}
+\begin{itemize}
+    \item \textbf{Gestione della conoscenza documentale:} Il sistema deve garantire risposte tracciabili e citare le fonti, bloccando la generazione quando mancano i riscontri. Questo impone uno studio preventivo sui metodi di retrieval ed evaluation, ambito su cui il gruppo non ha ancora esperienza diretta.
+    \item \textbf{Incertezza sui contratti di integrazione:} Le interfacce applicative per lo scambio dati (autenticazione, saldo ferie, scrittura su database) non sono ancora definite e verranno concordate solo a progetto avviato. L'assenza di API già pronte o documentate introduce un margine di incertezza sensibile nella stima delle prime fasi di lavoro.
+\end{itemize}
+
 \subsubsection{Conclusioni}
-Conclusioni
-
-\subsection{CAPITOLATO 3}
-
-\subsubsection{Descrizione}
-Descrizione
-\subsubsection{Dominio}
-Descrizione del domino
-
-\subsubsection{Motivazione della scelta}
-Motivazione
-\subsubsection{Conclusioni}
-Conclusioni
+Il gruppo ha valutato l'azienda e il progetto C2 in modo estremamente positivo. Tuttavia, alla luce del bilancio complessivo tra i punti di forza e i fattori di incertezza individuati, si è scelto di non procedere con questo capitolato. Oltre alle criticità tecniche evidenziate, ha inciso sulla decisione finale l'elevato livello di concorrenza con altri gruppi di lavoro interessati alla medesima proposta, il che avrebbe introdotto un ulteriore elemento di incertezza sull'effettiva assegnazione. La scelta non deriva quindi da una mancanza di qualità del capitolato, ma dalla preferenza per un'altra proposta ritenuta maggiormente in linea con le aspirazioni del gruppo e con garanzie di assegnazione più elevate.
