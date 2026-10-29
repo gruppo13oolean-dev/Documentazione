@@ -5,7 +5,7 @@ In questo documento viene presentata l'analisi dei capitolati d'appalto che abbi
 \subsection{C0: AIRA}
 
 \subsubsection{Descrizione}
-Il capitolato richiede la progettazione di un sistema multimodale basato su intelligenza artificiale per l'elaborazione di flussi informativi eterogenei e non strutturati (e-mail, file allegati, tracciati vocali e immagini). Il sistema estrae e formalizza i dati in strutture standard (JSON o record di database), avviando automatismi di notifica ed esecuzione tramite API REST verso software gestionali aziendali (ERP, CRM, piattaforme B2B e sistemi di ticketing) o flussi e-mail. Lo scopo è ridurre il lavoro a carico degli operatori, evitando errori di trascrizione e ritardi nei processi operativi.
+Il capitolato richiede la progettazione di un sistema multimodale basato su intelligenza artificiale per l'elaborazione di flussi informativi eterogenei e non strutturati (e-mail, file allegati, tracciati vocali e immagini). Il sistema estrae e formalizza i dati in strutture standard (JSON o record di database), avviando automatismi di notifica ed esecuzione tramite API REST verso software gestionali aziendali (ERP, CRM, piattaforme B2B e sistemi di ticketing) o flussi e-mail.
 
 \subsubsection{Dominio}
 \paragraph{Dominio tecnologico:}
@@ -19,7 +19,8 @@ Durante l'incontro conoscitivo con il proponente è emerso che l'adozione di Jav
 \end{itemize}
 Tra i requisiti chiave figurano inoltre la modularità e la scalabilità dell'architettura, oltre ad un pannello per la configurazione dei canali e alla consultazione dei log.
 \paragraph{Dominio applicativo:}
-Il progetto opera nel contesto B2B, caratterizzato da comunicazioni frammentate e spesso prive di formalizzazione (codici parziali, abbreviazioni o sintassi non convenzionali). Lo strumento mira a centralizzare l'acquisizione dei dati, automatizzando operazioni quali la generazione di un ordine d'acquisto nel portale B2B partendo dal parsing di una scansione o di una mail.
+\paragraph{Dominio applicativo:}
+Il progetto opera nel contesto B2B, caratterizzato da comunicazioni ed flussi informativi eterogenei, frammentati e spesso privi di formalizzazione standard (codici parziali, abbreviazioni o sintassi non convenzionali). Lo strumento mira a centralizzare l'acquisizione dei dati, automatizzando il parsing delle comunicazioni in ingresso (come e-mail o allegati) per estrarre informazioni strutturate e attivare le relative operazioni gestionali nei sistemi aziendali.
 
 \subsubsection{Motivazione della scelta}
 La decisione del gruppo si fonda sui seguenti fattori:
