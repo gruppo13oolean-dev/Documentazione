@@ -1,100 +1,144 @@
 \section{Valutazione degli altri capitolati}
 
-\subsection{Capitolato 1}
+\subsection{C1:  AURA: AI for Understanding, Reasoning and Automation}
+
+Il capitolato proposto prevede la progettazione e la realizzazione di una architettura cloud che sia in grado di interfacciare tramite MCP (Model Context Protocol) le API \textbf{KNX IoT} di un impianto domotico con servizi commerciali di intelligenza artificiale (quali ad esempio Claude, ChatGPT e Gemini)
 
 \subsubsection{Pro}
-Pro Capitolato
+\begin{itemize}
+    \item \textbf{Uso di MCP e tecnologie moderne:} Questo progetto ha un alto potere formativo richiedendo l'implementazione di tecnologie all'avanguardia e in rapida crescita come: l'uso del protocollo MCP, l'attuazione di pratiche di containerizzazione del codice tramite Docker, la predisposizione al cloud con AWS e ovviamente l'integrazione tra LLM e dispositivi IoT. Nel mondo lavorativo odierno la conoscenza della maggior parte di queste tecnologie rappresenta ormai il requisito minimo. 
+
+    
+    \item \textbf{Obiettivi chiari e perimetro ben delimitato:} La proponente definisce in modo chiaro i macro-componenti obbligatori, definendo inoltre 17 casi d'uso base e 21 casi avanzati di interazione conversazionale. Questo abbassa di molto il rischio di burnout, evitando inoltre lo sviluppo di funzionalità out-of-scope.
+    \item \textbf{Kit hardware fornito al gruppo:} La proponente mette a disposizione un kit hardware portatile comprensivo di gateway BLE, attuatori, comando tapparelle, termostato e sensori di presenza UWB. Questo insieme agli obbiettivi e i casi d'uso definiti in modo chiaro, permettono di osservare in modo tangibile il reale funzionamento del sistema, oltre  a rendere piu semplici le fasi di test funzionale.
+\end{itemize}
 
 \subsubsection{Contro}
-Contro Capitolato
+\begin{itemize}
+    \item \textbf{Complessità di compliance, accordi legali e dati sensibili:} Un impianto domotico tratta informazioni sensibili relative alla sfera privata e alla sicurezza dell'abitazione, come per esempio: rilevamento di presenza tramite sensori UWB, gestione varchi e allarmi, statistiche di consumo energetico e simili. Il semplice trattamento "chiuso" di questi dati richiederebbe di per se una accordo sul loro trattamento, in questo caso, si aggiungerebbe un ulteriore livello di complessità dovuto all'interazione degli LLM con questi dati.
+    
+\end{itemize}
 
 \subsubsection{Conclusioni}
-Conclusioni
+Fin dall'inizio abbiamo riscontrato grande interesse per questo progetto, suscitato soprattutto dall'utilizzo del protocollo MCP, la chiarezza degli obiettivi e la fornitura del kit hardware da parte della propnente, ma abbiamo deciso di orientarci verso altre proposte visto il grande onere per il trattamento dati e poichè abbiamo notato come il progetto fosse fin da subito concitato da molti gruppi.
 
-\subsection{Capitolato 2}
+\subsection{C3: FossDot: Smart speaker open source, estensibile e rispettoso della privacy}
+
+Il capitolato proposto mira a realizzare un ecosistema interamente open source per uno smart speaker vocale. L'obbiettivo principale è quello di tutelare la privacy dell'utente finale, dando loro pieno controllo del dispositivo.
 
 \subsubsection{Pro}
-Pro Capitolato
+\begin{itemize}
+    \item \textbf{Open Source e piena titolarità del codice:} E' stato chiarito che l'intero ecosistema  restarà di proprietà del gruppo con rilascio sotto licenza permissiva. Questo offre un'ottima opportunità di valorizzazione del portfolio personale dei membri del gruppo.
+    \item \textbf{Tematiche attuali e tecnologie stimolanti:} Il progetto affronta concretamente i problemi della maggior parte degli smart speaker commericiali, come: vendor lock-in, la non chiara gestione della privacy domestica e l'obsolescenza programmata. Per fare ciò propone l'uso di tecnologie moderne quali Rust e modelli locali tramite Ollama, faster-whisper, Piper e l'uso di MCP.
+    \item \textbf{Supporto tecnico formativo:} La proponente mette a disposizione sessioni di approfondimento tecnico con i propri software architect, oltre ad offrire supporto sulle pratiche di agentic coding, il che rende tale progetto altamente formativo.
+\end{itemize}
 
 \subsubsection{Contro}
-Contro Capitolato
+\begin{itemize}
+    \item \textbf{Dispersione tra tecnologie hardware, embedded e software:} Il progetto richiede di lavorare su ambiti ingegneristici molto distanti tra loro, a partire dalla gestione dell'hardware (SBC, array di microfoni, amplificatore, vincoli fisici del contenitore e altri), lo sviluppo di un firmware a basso livello, l'implementazione di pipeline audio/AI in tempo reale e lo sviluppo di funzioni web di sincronizzazione tra le stanze.
+    \item \textbf{Rischio di aumento dei tempi di sviluppo:} Non essendoci uno stack tecnologico imposto, il gruppo dovrà sceglierlo in modo autonomo, questo unito alla curva di apprendimento di Rust e alle incognite legate al collaudo dei componenti hardware, espone il gruppo a un forte rischio di dilatazione dei tempi di sviluppo e di dispersione soprattutto durante le prime fasi.
+    \item \textbf{Complessità di testing e conformità GDPR:} Dimostrare il funzionamento del flusso completo su un prototipo funzionante rappresenta requisito obbligatorio ai fini di completamento del perogetto, è richiesta infatti una copertura di test di almeno dell'80\% sulle componenti applicative. Un'ulteriore complessità viene aggiunta dalla gestione della voce, la quale, rappresenta un dato sensibile e personale, che richiede particolare attenzione per quanto riguarda la conformità GDPR.
+\end{itemize}
 
 \subsubsection{Conclusioni}
-Conclusioni
+Pur riconoscendo il valore etico del progetto, l'eccessiva frammentazione delle competenze necessrie e delle aree di sviliuppo da coprire è stata valutata dal gruppo come troppo dispersiva rispetto al tempo a disposizione.
 
-\subsection{Capitolato 3}
+\subsection{C4: Piattaforma per la gestione dei veicoli e dei servizi post-vendita}
+
+Il capitolato proposto mira a realizzare una piattaforma destinata al settore automotive, con l'obbiettivo di coordinare il ciclo di vita post-vendita del veicolo tra casa automobilistica, concessionarie e eentri di assistenza e proprietari finali.
 
 \subsubsection{Pro}
-Pro Capitolato
+\begin{itemize}
+    \item \textbf{Eccellente stack tecnologico e moderno:} Viene proposto l'uso di tecnologie moderne e solide, che ad oggi sono fortemente richieste dal mercato: Node.js, NestJS, TypeScript e Go per il backend, Angular per il frontend, NATS o Apache Kafka per l'orchestrazione asincrona ad eventi, PostgreSQL, MongoDB e Redis per la la persistenza dei dati e infine deployment su Kubernetes.
+    \item \textbf{Indipendenza da dispositivi fisici:} Non è richiesta alcuna integrazione diretta con le centraline elettroniche dei veicoli, i dati telemetrici e di utilizzo possono essere infatti inseriti manualmente o generati tramite simulatore. Questo rimuove un importante livello di complessità.
+\end{itemize}
 
 \subsubsection{Contro}
-Contro Capitolato
+\begin{itemize}
+    \item \textbf{Progetto estremamente orizzontale:} Il perimetro funzionale richiesto è vastissimo, prevedendo la realizzazione di tre portali web distinti: uno per la casa automobilistica, uno per la concessionaria e uno per il proprietario. E' inoltre necessario coordinare almeno 5 microservizi applicativi: Modelli e Veicoli, Concessionarie e Proprietari, Manutenzioni e Appuntamenti, Campagne di Richiamo e Notifiche. A tutto ciò si sommano ben 16 requisiti funzionali. La mole di lavoro affinche ogni areea sia bene integrata e funzionale, anche e solo ai fini di MVP, espone il gruppo ad un elevato rischio di sovraccarico e burnout.
+    \item \textbf{Complessità di compliance:} Vengono imposti requisiti stringenti di controllo degli accessi basato sui ruoli, cifratura dei dati in transito, e una rigorosa segregazione logica dei dati tra concessionarie diverse e tra singoli proprietari, il che necessità inoltre particolare attenzione per la tutela GDPR dei dati personali.
+    \item \textbf{Onere gravoso di validazione e documentazione:} Vengono elencati 19 macro-categorie di test obbligatori e 7 categorie opzionali, oltre alla stesura di una documentazione tecnica particolarmente estesa.
+\end{itemize}
 
 \subsubsection{Conclusioni}
-Conclusioni
+Sebbene lo stack tecnologico proposto sia tra i più interessanti e formativi, il gruppo ha ritenuto questo progetto troppo dispersivo, l'enorme quantità di funzionalità e test richiesti comporterebbe un carico di lavoro difficilmente sostenibile.
 
-\subsection{Capitolato 4}
+\subsection{C5: RareCare: Piattaforma AI per la raccolta dati e il supporto decisionale nelle malattie rare}
+
+Il capitolato proposto mira a realizzare una piattaforma con assistente AI che ha come obbiettivo supportare le famiglie e i Care Navigator (figure che guidano i pazienti attraverso le complessità del sistema sanitario) nella gestione clinica, scolastica e burocratica delle malattie rare neurodegenerative, con particolare attenzion alla Sindrome di Sanfilippo.
 
 \subsubsection{Pro}
-Pro Capitolato
+\begin{itemize}
+    \item \textbf{Architettura di riferimento ben strutturata e impatto sociale:} La proponente fornisce una documentazione che delinea con estrema cura un'architettura Domain-Driven e Serverless su AWS basata su un sistema plugin (Disease Pack) che permette di estendere il sistema a nuove patologie senza alterare il core applicativo. Il gruppo riconosciuto inoltre il grande impatto sociale che un tale progetto potrebbe avere.
+    \item \textbf{Supporto e affiancamento tencico aziendale:} La proponente garantisce affiancamento su cloud AWS, sull'integrazione AI, sul design UX/UI, e sulla mediazione dei requisiti.
+\end{itemize}
 
 \subsubsection{Contro}
-Contro Capitolato
+\begin{itemize}
+    \item \textbf{Complessità normativa e di compliance:} Trattando dati sanitari e genetici si è obbligati a rispettare linee guide severissime, come: redazione della valutazione d'impatto, vincolo di residenza dei dati in regioni UE, registro di audit immutabile, modelli di autorizzazione fine-grained basati su ruoli, cifratura KMS AES-256 (con l'ulteriore complessità tecnica di conciliare la cifratura e l'elaborazione dei testi da parte dell'AI) con il rischio tra l'altro di ricadere nei vincoli del Regolamento sui Dispositivi Medici e dell'AI Act.
+    \item \textbf{Delicatezza del dominio applicativo:} Traddando piani terapeutici, estrazione automatica di farmaci, dosaggi e sintomi, è richiesta tolleranza zero verso le allucinazioni del modello AI, questo implica l'uso di guardrail rigorosi, validazione delle fonti e revisione umana obbligatoria.
+    \item \textbf{Vincolo sullo sviluppo di un'App Mobile:} Viene richiesto lo sviluppo di un'applicazione mobile e web cross-platform in Flutter o React Native, la quale, visto il campo di applicazione, necessita di essere conforme ai rigorsosi criteri di accessibilità WCAG 2.1 AA e di design empatico.
+\end{itemize}
 
 \subsubsection{Conclusioni}
-Conclusioni
+Pur apprezzando la qualità architetturale e soprattuto l'obiettivo sociale di questo progetto, l'estrema delicatezza del dominio di applicazione e il grande peso della compliance ha portato il gruppo ad escludere questa proposta.
 
-\subsection{Capitolato 5}
+\subsection{C6: Sviluppare un Sistema IA di Caching Semantico e Dashboard FinOps}
+
+Il capitolato proposto mira a realizzare un'architettura formata da due layer che va ad estendere le funzionalità dell'orchestratore open source LiteLLM. Il primo  è un layer di Caching Semantico basato su embedding e ricerca per similarità vettoriale, che mira a ottimizzare il consumo dei token IA, che ad oggi, soprattutto in un ambito aziendale, rappresentano una spesa non trascurabile. Il secondo layer consiste invece in una Dashboard FinOps finalizzata alla  rendicontazione, monitoraggio e previsione dei costi legati al consumo dei token.
 
 \subsubsection{Pro}
-Pro Capitolato
+\begin{itemize}
+    \item \textbf{Stack tecnologico moderno e ben focalizzato:} Vengono proposte tecnologie moderne e bene perimetrate: Python 3.10+, LiteLLM, FastAPI/Flask, modelli di embedding come OpenAI, Redis, Vector Database su PostgreSQL, React con Chart.js e l'uso di Docker Compose.
+    \item \textbf{Problema realistico e di forte rilevanza industriale:} Nel contesto odierno in cui l'uso dell'IA è centrale anche in ambito aziendale, l'ottimizzazione dei costi e l'eliminazione delle chiamate ridondanti rappresentano esigenze reali per le aziende.
+\end{itemize}
 
 \subsubsection{Contro}
-Contro Capitolato
+\begin{itemize}
+    \item \textbf{Complesso generare un risultato realmente affidabile:} Sebbene l'obiettivo sia chiaro, implementare un meccanismo di caching semantico efficace in un contesto aziendale è estremamente complesso. Seppur alcune richieste possano risultare simili, potrebbero nascondere sfumature o contesti di sessione differenti, che rendono difficile riuscire a calibrare la soglia similarità in modo da ridurre al minimo il rischio di falsi positivi, senza considerare gli effetti che tali risposte errate potrebbero avere in ambito aziendale.
+    \item \textbf{Difficoltà nella separazione tra testing deterministico e probabilistico:} Viene richiesta una copertura dei test automatici almeno del 70\% e viene imposto di separare i test deterministici dalla valutazione probabilistica della cache semantica e dei modelli di previsione della spesa mensile, questa attività richiede metriche e dataset di validazione non banali da costruire in poco tempo.
+    \item \textbf{Dipendenza da una codebase di terze parti:} Il vincolo di utilizzare LiteLLM come proxy obbliga il gruppo a investire tempo per uno studio profondo dell'architettura del progetto open source, al fine poi di innestarvi in modo pulito la nuova logica richiesta.
+\end{itemize}
 
 \subsubsection{Conclusioni}
-Conclusioni
+Nonostante il capitolato presenti uno stack tecnico di grande interesse e affronti un problema molto stimolante e odierno, la complessità nel garantire l'affidabilità e il valore finale del risultato e la difficoltà di testing ha portato il gruppo a preferire altre alternative.
 
-\subsection{Capitolato 6}
+\subsection{C7: SmartDashboard: piattaforma di Business Intelligence potenziata da AI}
+
+Il capitolato proposto mira a realizzare una piattaforma che permetta l'estrazione dei dati da un gestionale ERP, la trasformazione di essi tramite pipeline ETL in un Data Warehouse modellato basato su DuckDB, e infine una piattaforma web per la composizione in stile drag \& drop di dashboard analitiche affiancate da agente AI.
 
 \subsubsection{Pro}
-Pro Capitolato
+\begin{itemize}
+    \item \textbf{Visione completa del ciclo di vita del dato:} Il progetto ruota attorno all'intero ciclo del dato, dall'ingestione nel Raw Data Store alle pipeline ETL in Python, fino ai database vettoriali e all'integrazione con LLM commerciali.
+    \item \textbf{Dataset reale a disposizione:} La proponente offre la possibilità di lavorare su dataset aziendali reali, in particolare dei settori alimentare e logistico (ordini, vendite, magazzino), il che permette una validazione concreta delle performance.
+\end{itemize}
 
 \subsubsection{Contro}
-Contro Capitolato
+\begin{itemize}
+    \item \textbf{Progetto estremamente orizzontale e vastità di perimetro:} Il progetto richiede di sviluppare un'architettura che accorpa tre sottosistemi molto onerosi: la pipeline ETL e un Data Warehouse, un costruttore di dashboard drag \& drop comprensivo di griglia reattiva, filtri, funzioni di esportazioni in PDF/Excel, vista mobile e 7 famiglie di widget complessi come  gauge, mappe, tabelle pivot e altri, infine un layer AI capace di generare widget da testo libero, fare da essistente design, e altro ancora.
+    \item \textbf{Eccessiva autonomia dell'utente e requisiti generici e flessibili:} Trattandosi di uno strumento self-service in cui l'utente ha piena autonomia, risulta estremamente complesso identificare e progettare tutte le funzioni e le query che il sistema dovrà supportare.
+    \item \textbf{Estrema difficoltà di testing e validazione:} Le infinite combinazioni di widget, filtri e richieste conversazionali che ogni utente può effettuare, rende il testing della piattaforma particolarmente arduo e poco affidabile.
+\end{itemize}
 
 \subsubsection{Conclusioni}
-Conclusioni
+Per quanto l'obbiettivo finale del progetto sia molto interessante e ambizioso, l'assenza di un perimetro definito e la difficoltà di testing che uno strumento self-service porta con se, ha portato il gruppo a scartare il capitolato, ritenendo reale il rischio di non riuscire a consolidare in modo concreto tutte le componenti richieste.
 
-\subsection{Capitolato 7}
+\subsection{C9: SpecCheck: Sviluppo di Skills per OpenCode per la verifica della tracciabilità end-to-end}
+
+Il capitolato proposto mira alla realizzazione di un pacchetto integrato di estensioni come skill, tool, command, per l'agente OpenCode, con lo scopo finale di verificare automaticamente la tracciabilità e la conformità semantica tra casi d'uso, requisiti tecnici e codice sorgente di un progetto software esterno.
 
 \subsubsection{Pro}
-Pro Capitolato
+\begin{itemize}
+    \item \textbf{Ricerca innovativa:} Si esplora una problematica emergente di grande interesse nell'era dello sviluppo con AI, ovvero la verifica automatizzata della coerenza tra casi d'uso, requisiti tecnici e implementazione effettiva.
+    \item \textbf{Fornitura dell'accesso LLM dalla proponente:} La proponente mette a disposizione sia l'accesso a modelli LLM proprietari enterprise, sia l'utilizzo illimitato di modelli open weight più compatti come Gemma 4 o Qwen 3.8 per testare la robustezza della soluzione.
+\end{itemize}
 
 \subsubsection{Contro}
-Contro Capitolato
+\begin{itemize}
+    \item \textbf{Obiettivi finali poco chiari:} Trattandosi come detto prima, e come affermato anche dalla proponente, di un progetto a carattere fortamente eslporativo, questo lascia poco definiti i confini pratici e le metriche di accettazione del prodotto. Si rischia quindi di effettuare stime errate sui tempi di sviluppo oltre al rischio di sviluppo di funzionalità out-of-scope.
+    \item \textbf{Complessità concettuale e algoritmica molto elevata:} Chiedere ad un LLM di interpretare diagrammi UML, dedurre la semantica di un intero codice sorgente, confrontarlo con le specifiche e rilevare codice non coperto da requisiti tecnici, vuol dire fargli toccare problemi teorici di alta complessità, facilmente esposti a falsi positivi e allucinazioni.
+    \item \textbf{Frammentazione artefatti e progetto esterno da reperire:} Poiché non è possibile svolgere analisi deterministiche sui file dagli LLM, il capitolato impone di unire alle skill lo sviluppo di un Plugin per OpenCode o di un applicativo esterno con dashboard testuale, unificando il tutto tramite uno script di installazione poco stimolante dal punto di vista progettuale. Inoltre, è compito del gruppo reperire un intero progetto software esterno completo di casi d'uso, requisiti e codice su cui eseguire la validazione.
+\end{itemize}
 
 \subsubsection{Conclusioni}
-Conclusioni
-
-\subsection{Capitolato 8}
-
-\subsubsection{Pro}
-Pro Capitolato
-
-\subsubsection{Contro}
-Contro Capitolato
-
-\subsubsection{Conclusioni}
-Conclusioni
-
-\subsection{Capitolato 9}
-
-\subsubsection{Pro}
-Pro Capitolato
-
-\subsubsection{Contro}
-Contro Capitolato
-
-\subsubsection{Conclusioni}
-Conclusioni
+Sebbene il progetto cerchi soluzione ad una problematica di grande interesse nel mondo dello sviluppo odierno, a causa della scarsa definizione dell'obiettivo finale, dell'elevato rischio esplorativo e del poco interesse suscitato nel gruppo per certe implementazioni techinche come il packaging degli script di installazione, il gruppo ha deciso di non candidarsi per questo capitolato.
