@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Download, Github } from "lucide-react";
+import { Download, Github, Maximize2 } from "lucide-react";
 import { listDocs } from "@/lib/docs.functions";
-import { formatDate, type Doc } from "@/lib/docs";
+import { docHref, formatDate, type Doc } from "@/lib/docs";
 import { buildTree, findFolder, type Folder } from "@/lib/tree";
 import { repoUrl, site } from "@/lib/site";
 import { Breadcrumbs, FolderView } from "@/components/FolderView";
@@ -59,9 +59,15 @@ export default async function Page({
           <h1 className="text-3xl font-bold">{doc.title}</h1>
           {doc.date && <p className="mt-1 text-sm text-muted-foreground">{formatDate(doc.date)}</p>}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <a href={src} download={doc.name} className="clip-bevel inline-flex items-center gap-2 bg-brand px-4 py-2 text-sm font-medium text-primary-foreground">
             <Download className="h-4 w-4" /> Scarica
+          </a>
+          <a
+            href={`${docHref(doc.rel)}?fullscreen`}
+            className="inline-flex items-center gap-2 rounded-md border bg-card px-4 py-2 text-sm font-medium hover:border-primary/50"
+          >
+            <Maximize2 className="h-4 w-4" /> Schermo intero
           </a>
           <a href={gh} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md border bg-card px-4 py-2 text-sm font-medium hover:border-primary/50">
             <Github className="h-4 w-4" /> GitHub

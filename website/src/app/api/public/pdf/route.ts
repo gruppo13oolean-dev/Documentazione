@@ -1,8 +1,9 @@
-import { isAllowedPath } from "@/lib/docs";
+import { isAllowedPath, resolveFullscreenPdfPath } from "@/lib/docs";
 import { site } from "@/lib/site";
 
 export async function GET(request: Request) {
-  const path = new URL(request.url).searchParams.get("path");
+  const reqUrl = new URL(request.url);
+  const path = reqUrl.searchParams.get("path") ?? resolveFullscreenPdfPath(reqUrl.pathname, reqUrl.searchParams);
   if (!isAllowedPath(path)) return new Response("Bad request", { status: 400 });
   const url = `https://raw.githubusercontent.com/${site.repoOwner}/${site.repoName}/${site.branch}/${path
     .split("/")
