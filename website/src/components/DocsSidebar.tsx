@@ -38,13 +38,13 @@ function DocNode({ doc, current, depth }: { doc: Doc; current: string; depth: nu
   const active = current === doc.rel;
   return (
     <li style={{ paddingLeft: depth * 12 + 22 }}>
-      <Link
+      <a
         href={docHref(doc.rel)}
         className={`flex items-center gap-2 rounded-md px-1.5 py-1 text-sm ${active ? "bg-primary/10 font-medium text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
       >
         <FileText className="h-3.5 w-3.5 shrink-0" />
         <span className="truncate">{doc.title}</span>
-      </Link>
+      </a>
     </li>
   );
 }

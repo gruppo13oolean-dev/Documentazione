@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isAllowedPath, resolveFullscreenPdfPath, toDoc } from "@/lib/docs";
+import { isAllowedPath, resolveDocPdfPath, toDoc } from "@/lib/docs";
 
 describe("docs", () => {
   it("only accepts PDFs under output/", () => {
@@ -16,19 +16,13 @@ describe("docs", () => {
     expect(isAllowedPath("src/a.pdf")).toBe(false);
     expect(isAllowedPath("output/a.pdf")).toBe(true);
   });
-  it("resolves fullscreen PDF paths from query parameter or path suffix", () => {
+  it("resolves document URL paths directly to repo PDF paths", () => {
     const docUrlPath =
       "/documenti/Verbali/Verbali%20interni/verbale_interno_2026-10-26/verbale_interno_2026-10-26.pdf";
     const expectedRepoPath =
       "output/Verbali/Verbali interni/verbale_interno_2026-10-26/verbale_interno_2026-10-26.pdf";
 
-    expect(resolveFullscreenPdfPath(docUrlPath, new URLSearchParams("fullscreen"))).toBe(expectedRepoPath);
-    expect(resolveFullscreenPdfPath(docUrlPath, new URLSearchParams("fullscreen=true"))).toBe(expectedRepoPath);
-    expect(resolveFullscreenPdfPath(docUrlPath, new URLSearchParams("fullscreen=1"))).toBe(expectedRepoPath);
-    expect(resolveFullscreenPdfPath(`${docUrlPath}/fullscreen`, new URLSearchParams())).toBe(expectedRepoPath);
-
-    expect(resolveFullscreenPdfPath(docUrlPath, new URLSearchParams())).toBeNull();
-    expect(resolveFullscreenPdfPath(docUrlPath, new URLSearchParams("fullscreen=false"))).toBeNull();
-    expect(resolveFullscreenPdfPath("/documenti/Verbali", new URLSearchParams("fullscreen"))).toBeNull();
+    expect(resolveDocPdfPath(docUrlPath)).toBe(expectedRepoPath);
+    expect(resolveDocPdfPath("/documenti/Verbali")).toBeNull();
   });
 });

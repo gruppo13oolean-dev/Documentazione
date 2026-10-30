@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { resolveFullscreenPdfPath } from "@/lib/docs";
+import { resolveDocPdfPath } from "@/lib/docs";
 
 export function middleware(request: NextRequest) {
-  const docPath = resolveFullscreenPdfPath(request.nextUrl.pathname, request.nextUrl.searchParams);
+  const docPath = resolveDocPdfPath(request.nextUrl.pathname);
   if (!docPath) return NextResponse.next();
 
   const url = request.nextUrl.clone();

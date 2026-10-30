@@ -62,20 +62,11 @@ export function isAllowedPath(p: string | null): p is string {
   return p.startsWith(site.docsRoot + "/") && p.toLowerCase().endsWith(".pdf");
 }
 
-export function resolveFullscreenPdfPath(pathname: string, searchParams: URLSearchParams): string | null {
+export function resolveDocPdfPath(pathname: string): string | null {
   if (!pathname.startsWith("/documenti/")) return null;
 
-  let rawSlug = pathname.slice("/documenti/".length).replace(/\/+$/, "");
-  const hasPathSuffix = rawSlug.toLowerCase().endsWith("/fullscreen");
-  if (hasPathSuffix) {
-    rawSlug = rawSlug.slice(0, -"/fullscreen".length);
-  }
-
-  const fullscreenParam = searchParams.get("fullscreen");
-  const hasQueryParam =
-    searchParams.has("fullscreen") && fullscreenParam !== "false" && fullscreenParam !== "0";
-
-  if (!hasPathSuffix && !hasQueryParam) return null;
+  const rawSlug = pathname.slice("/documenti/".length).replace(/\/+$/, "");
+  if (!rawSlug.toLowerCase().endsWith(".pdf")) return null;
 
   let decodedRel: string;
   try {

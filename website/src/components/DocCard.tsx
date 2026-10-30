@@ -1,11 +1,10 @@
-import Link from "next/link";
 import { FileText } from "lucide-react";
 import type { Doc } from "@/lib/docs";
 import { docHref, formatDate } from "@/lib/docs";
 
 export function DocCard({ doc }: { doc: Doc }) {
   return (
-    <Link
+    <a
       href={docHref(doc.rel)}
       className="group flex items-start gap-4 rounded-lg border bg-card p-4 shadow-card transition-all hover:-translate-y-0.5 hover:border-primary/50"
     >
@@ -19,6 +18,6 @@ export function DocCard({ doc }: { doc: Doc }) {
           {doc.date && ` · ${formatDate(doc.date)}`}
         </span>
       </span>
-    </Link>
+    </a>
   );
 }
